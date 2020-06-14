@@ -14,7 +14,9 @@ pool:
 variables:
   #solution: '**/*.sln'
   #buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  buildConfiguration: 'Release' #Standard variable specifying release build.
+  wwwRootDir: 'Tailspin.SpaceGame.web/wwwroot' #Location of WWW Directory.
+  dotNetSdkVersion: #Version of .NET used for the build.
 
 steps:
 #- task: NuGetToolInstaller@1
@@ -35,17 +37,20 @@ steps:
 #    configuration: '$(buildConfiguration)'
 
 - task: UseDotNet@2
-  displayName: 'Use .NET Core SDK 3.1.300'
+  #displayName: 'Use .NET Core SDK 3.1.300' #Added Variable.
+  displayName: 'Using .NET Core SDK $(dotNetSdkVersion)'
   inputs:
     # packageType: sdk
-    version: 3.1.300
+    #version: 3.1.300
+    version: $(dotNetSdkVersion)
 
 - task: Npm@1
   displayName: 'Run npm install'
   inputs:
     verbose: false
 
-- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+#- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+-script '.node_modules/.bin/node-sass $(wwwRootDir) --output $(wwwRootDir)'
   displayName: 'Compile Sass assets'
 
 - task: gulp@1
@@ -53,7 +58,8 @@ steps:
 
 - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'Write build info'
-  workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+  #workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+  workingDirectory: $(wwwRootDir)
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies'
@@ -62,10 +68,12 @@ steps:
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build the project - Release'
+  #displayName: 'Build the project - Release'
+  displayName: 'Build Project $(buildConfiguration)'
   inputs:
     command: 'build'
-    arguments: '--no-restore --configuration Release'
+    #arguments: '--no-restore --configuration Release'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
