@@ -79,4 +79,4 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
-  condition: suceeded() #Default behavor. Only runs if preceeding step failed.
+  condition: succeeded() #Default behavor. Only runs if preceeding step failed.
