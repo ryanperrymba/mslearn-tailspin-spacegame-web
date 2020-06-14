@@ -15,7 +15,7 @@ variables:
   #solution: '**/*.sln'
   #buildPlatform: 'Any CPU'
   buildConfiguration: 'Release' #Standard variable specifying release build.
-  wwwRootDir: 'Tailspin.SpaceGame.web/wwwroot' #Location of WWW Directory.
+  wwwRootDir: 'Tailspin.SpaceGame.Web/wwwroot' #Location of WWW Directory.
   dotNetSdkVersion: #Version of .NET used for the build.
 
 steps:
