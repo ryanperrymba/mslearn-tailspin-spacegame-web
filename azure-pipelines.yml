@@ -1,10 +1,12 @@
+#Lost the templated version pulling from master!
+
 trigger:
 - '*'
 
 pool:
   vmImage: 'ubuntu-18.04'
   demands:
-  - npm
+    - npm
 
 variables:
   buildConfiguration: 'Release'
@@ -43,6 +45,15 @@ steps:
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
+
+#Run Unit Tests.
+- task: DotNetCoreCLI@2
+  displayName: 'Run unit tests - ($buildConfiguration)'
+  inputs:
+    command: 'test'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+    publishTestResults: true
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
